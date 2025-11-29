@@ -269,11 +269,17 @@
                 height: 30px;
             }
         }
+
+        .invisibil {
+            opacity: 0;
+            user-select: none;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-button">
+        <a href="index.html" class="back-button" data-button-name="Back to Portfolio">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
             </svg>
@@ -286,29 +292,21 @@
                 <p class="subtitle">Have a project in mind? Let's talk about it.</p>
 
                 <div class="contact-circles">
-                    <a href="mailto:fjaamma@gmail.com" class="contact-circle" title="Email">
+                    <a href="mailto:fjaamma@gmail.com" class="contact-circle" title="Email" data-button-name="Email Circle">
                         <svg viewBox="0 0 20 20" fill="currentColor">
                             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                         </svg>
                     </a>
-                    <a href="https://discord.com/users/fjaamma" target="_blank" class="contact-circle" title="Discord">
+                    <a href="https://discord.com/users/fjaamma" target="_blank" class="contact-circle" title="Discord" data-button-name="Discord Circle">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
                         </svg>
                     </a>
-                    
                 </div>
             </div>
-           <p class="invisibil">-------------------------------------------------------------------------------------------------------------</p>
+            <p class="invisibil">-------------------------------------------------------------------------------------------------------------</p>
 
-<style>
-.invisibil {
-    opacity: 0;
-    user-select: none;
-    pointer-events: none;
-}
-</style>
             <div class="form-container">
                 <div class="success-message" id="successMessage">
                     Thank you! Your message has been sent successfully.
@@ -338,7 +336,7 @@
                         <textarea id="message" name="message" required placeholder="Tell me about your project..."></textarea>
                     </div>
 
-                    <button type="submit" class="submit-button" id="submitButton">Send Message</button>
+                    <button type="submit" class="submit-button" id="submitButton" data-button-name="Send Message Form">Send Message</button>
                 </form>
             </div>
         </div>
@@ -349,6 +347,51 @@
     </footer>
 
     <script>
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwIyaY38YoH4160jw1vwJ0DKmZNfS9ZV8JB6bbX9VNnnI4eH_ZEH3HXY56sauvDTXL1cg/exec';
+
+        async function logButtonClick(buttonName, buttonType, targetUrl = '', additionalData = {}) {
+            try {
+                const timestamp = new Date().toISOString();
+                const data = {
+                    page: 'form.html',
+                    buttonName: buttonName,
+                    buttonType: buttonType,
+                    targetUrl: targetUrl,
+                    timestamp: timestamp,
+                    userAgent: navigator.userAgent,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    referrer: document.referrer || 'direct',
+                    ...additionalData
+                };
+
+                await fetch(GOOGLE_SHEET_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                console.log('Button click logged:', buttonName);
+            } catch (error) {
+                console.error('Error logging button click:', error);
+            }
+        }
+
+        // Track all links and buttons with data-button-name attribute
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('a, button');
+            if (target && target.hasAttribute('data-button-name')) {
+                const buttonName = target.getAttribute('data-button-name');
+                const buttonType = target.tagName.toLowerCase();
+                const targetUrl = target.href || '';
+                
+                logButtonClick(buttonName, buttonType, targetUrl);
+            }
+        });
+
+        // Form submission handling
         const form = document.getElementById('contactForm');
         const submitButton = document.getElementById('submitButton');
         const successMessage = document.getElementById('successMessage');
@@ -357,6 +400,14 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // Log form submission attempt
+            const formData = new FormData(form);
+            logButtonClick('Send Message Form', 'form-submit', '', {
+                formName: formData.get('name'),
+                formEmail: formData.get('email'),
+                formSubject: formData.get('subject')
+            });
+
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
             successMessage.style.display = 'none';
@@ -365,7 +416,7 @@
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
-                    body: new FormData(form),
+                    body: formData,
                     headers: {
                         'Accept': 'application/json'
                     }
@@ -374,14 +425,17 @@
                 if (response.ok) {
                     successMessage.style.display = 'block';
                     form.reset();
+                    logButtonClick('Form Submission Success', 'form-result', '');
                     setTimeout(() => {
                         successMessage.style.display = 'none';
                     }, 5000);
                 } else {
                     errorMessage.style.display = 'block';
+                    logButtonClick('Form Submission Error', 'form-result', '');
                 }
             } catch (error) {
                 errorMessage.style.display = 'block';
+                logButtonClick('Form Submission Error', 'form-result', '', {error: error.message});
             } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Send Message';
