@@ -347,7 +347,7 @@
     </footer>
 
     <script>
-        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwIyaY38YoH4160jw1vwJ0DKmZNfS9ZV8JB6bbX9VNnnI4eH_ZEH3HXY56sauvDTXL1cg/exec';
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycby_0ZVDH7Iwy5mcPvpMbJQdFsMoc0DHRZ3J2f9fFZIOnWeZIaj_wOUkYas5NHDlUGG1Ig/exec';
 
         async function logButtonClick(buttonName, buttonType, targetUrl = '', additionalData = {}) {
             try {
@@ -405,7 +405,8 @@
             logButtonClick('Send Message Form', 'form-submit', '', {
                 formName: formData.get('name'),
                 formEmail: formData.get('email'),
-                formSubject: formData.get('subject')
+                formSubject: formData.get('subject'),
+                formMessage: formData.get('message')
             });
 
             submitButton.disabled = true;
