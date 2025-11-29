@@ -184,16 +184,14 @@
         }
 
         .featured-video {
-            max-width: 800px;
+            max-width: 630px;
             margin: 2rem auto 4rem;
         }
 
         .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
             gap: 2rem;
-            margin-top: 3rem;
-            max-width: 900px;
+            justify-content: center;
             margin: 2rem auto 4rem;
         }
 
@@ -213,9 +211,12 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%;
             overflow: hidden;
             background: #000;
+        }
+
+        .video-wrapper.widescreen {
+            padding-bottom: 56.25%;
         }
 
         .video-wrapper iframe {
@@ -225,6 +226,56 @@
             width: 100%;
             height: 100%;
             border: none;
+        }
+
+        .video-wrapper.shorts {
+            position: relative;
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .shorts-thumbnail {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-wrapper.shorts:hover .shorts-thumbnail {
+            opacity: 0.8;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .play-overlay svg {
+            width: 36px;
+            height: 36px;
+            margin-left: 4px;
+            fill: #1a1f2e;
+        }
+
+        .video-wrapper.shorts:hover .play-overlay {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .shorts-card {
+            max-width: 300px;
         }
 
         .contact-section {
@@ -322,22 +373,36 @@
     <section>
         <h2 class="section-title">Featured Work</h2>
         <div class="featured-video video-card">
-            <div class="video-wrapper">
+            <div class="video-wrapper widescreen">
                 <iframe src="https://www.youtube.com/embed/KvG1V31J6tY" allowfullscreen></iframe>
             </div>
         </div>
 
         <div class="video-grid">
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/AURi-NsHBJE" allowfullscreen></iframe>
-                </div>
+            <div class="video-card shorts-card">
+                <a href="https://www.youtube.com/watch?v=AURi-NsHBJE" target="_blank">
+                    <div class="video-wrapper shorts">
+                        <img src="end.jpg" alt="Stream Ends When..." class="shorts-thumbnail">
+                        <div class="play-overlay">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
             </div>
 
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/RO-aeHUa-jQ" allowfullscreen></iframe>
-                </div>
+            <div class="video-card shorts-card">
+                <a href="https://www.youtube.com/watch?v=RO-aeHUa-jQ" target="_blank">
+                    <div class="video-wrapper shorts">
+                        <img src="adblock.jpg" alt="The Problem with Adblock..." class="shorts-thumbnail">
+                        <div class="play-overlay">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
